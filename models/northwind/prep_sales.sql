@@ -1,16 +1,16 @@
 WITH orders AS (
     SELECT * FROM {{ ref('staging_orders') }}
 ),
-order_details as (
+order_details AS (
     SELECT * FROM {{ ref('staging_order_details') }}
 ),
-products as (
+products AS (
     SELECT * FROM {{ ref('staging_products') }}
 ),
-categories as (
+categories AS (
     SELECT * FROM {{ ref('staging_categories') }}
 ),
-joined as (
+joined AS (
     SELECT
         o.order_id,
         o.customer_id,
@@ -20,7 +20,7 @@ joined as (
         od.quantity,
         od.discount,
         (od.unit_price * od.quantity * (1 - od.discount)) AS revenue,
-        EXTRACT(year FROM  o.order_date) AS order_year,
+        EXTRACT(year FROM o.order_date) AS order_year,
         EXTRACT(month FROM o.order_date) AS order_month
     FROM orders o
     JOIN order_details od USING (order_id)
